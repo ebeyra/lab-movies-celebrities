@@ -1,13 +1,15 @@
-const { Schema, model, Types, isValidObjectId } = require("mongoose");
+const { Schema, model, Types } = require("mongoose");
 
 const movieSchema = new Schema({
   name: String,
   genre: String,
   plot: String,
-  cast: [{
+  cast: [
+    {
       type: Types.ObjectId,
-    //   ref: Celebrity
-  }]
+      ref: "Celebrity",
+    },
+  ],
 });
 
 const Movie = model("Movie", movieSchema);
