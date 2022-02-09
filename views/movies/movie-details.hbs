@@ -1,14 +1,13 @@
 <h2>Movie Details</h2>
-{{selection.title}}
-<li>Genre: {{selection.genre}}</li>
-<li>Plot: {{selection.plot}}</li>
-{{#each selection.cast}}
-  <li>Cast: {{_id}}</li>
-{{/each}}
-<form method="POST" action="/movies/{{selection._id}}/delete">
+{{results.title}}
+<li>Genre: {{results.genre}}</li>
+<li>Plot: {{results.plot}}</li>
+<li>Cast: {{cast.name}}</li>
+
+<form method="POST" action="/movies/{{results._id}}/delete">
   <button type="submit">Delete</button>
 </form>
 
-<form method="GET" action="/movies/{{selection._id}}/edit">
+<form method="GET" action="/movies/{{results._id}}/edit">
   <button type="submit">Edit</button>
 </form>

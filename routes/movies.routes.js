@@ -42,12 +42,11 @@ router.get("/movies/movies", (req, res, next) => {
 
 router.get("/movies/:id", (req, res, next) => {
   Movie.findById(req.params.id)
-    .populate("cast")
+    // .populate("cast")
     .then((results) => {
-      res.render("movies/movie-details", { selection: results });
-    })
-    .catch((err) => {
-      console.log("Something went wrong", err);
+      Celebrity.findById(results.cast).then((cast) => {
+        res.render("movies/movie-details", { results, cast });
+      });
     });
 });
 
@@ -74,7 +73,7 @@ router.get("/movies/:id/edit", (req, res, next) => {
     });
 });
 
-router.post("/movies/:id/edit", (res, req, next) => {
+router.post("/movies/:id/edit", (req, res, next) => {
   Movie.findByIdAndUpdate(req.params.id, {
     title: req.body.title,
     genre: req.body.genre,
@@ -82,6 +81,7 @@ router.post("/movies/:id/edit", (res, req, next) => {
     cast: req.body.cast,
   })
     .then((results) => {
+      console.log("What's in results: ", results);
       res.redirect(`/movies/${results._id}`);
     })
     .catch((err) => {
