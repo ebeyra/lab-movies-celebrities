@@ -1,9 +1,6 @@
 <h2>List of all Movies</h2>
-{{#each results}}
+{{#each allMovies}}
   <ul>
-    <li>{{this.name}}</li>
-    <li>{{this.genre}}</li>
-    <li>{{this.plot}}</li>
-    <li>{{this.cast}}</li>
+    <a href="/movies/{{this._id}}"><b>{{this.title}}</b></a>
   </ul>
 {{/each}}

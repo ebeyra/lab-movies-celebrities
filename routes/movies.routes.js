@@ -15,7 +15,7 @@ router.get("/movies/create", (req, res, next) => {
 
 router.post("/movies/create", (req, res, next) => {
   Movie.create({
-    name: req.body.name,
+    title: req.body.title,
     genre: req.body.genre,
     plot: req.body.plot,
     cast: req.body.cast,
@@ -33,7 +33,56 @@ router.post("/movies/create", (req, res, next) => {
 router.get("/movies/movies", (req, res, next) => {
   Movie.find()
     .then((results) => {
-      res.render("movies/movies", { results });
+      res.render("movies/movies", { allMovies: results });
+    })
+    .catch((err) => {
+      console.log("Something went wrong", err);
+    });
+});
+
+router.get("/movies/:id", (req, res, next) => {
+  Movie.findById(req.params.id)
+    .populate("cast")
+    .then((results) => {
+      res.render("movies/movie-details", { selection: results });
+    })
+    .catch((err) => {
+      console.log("Something went wrong", err);
+    });
+});
+
+router.post("/movies/:id/delete", (req, res, next) => {
+  Movie.findByIdAndRemove(req.params.id)
+    .then((results) => {
+      console.log("Movie removed", results);
+      res.redirect("/movies/movies");
+    })
+    .catch((err) => {
+      console.log("Something went wrong", err);
+    });
+});
+
+router.get("/movies/:id/edit", (req, res, next) => {
+  Movie.findById(req.params.id)
+    .then((results) => {
+      Celebrity.find().then((celebResults) => {
+        res.render("movies/edit-movie", { celebResults, results });
+      });
+    })
+    .catch((err) => {
+      console.log("Something went wrong", err);
+    });
+});
+
+router.post("/movies/:id/edit", (res, req, next) => {
+  Movie.findByIdAndUpdate(req.params.id, {
+    title: req.body.title,
+    genre: req.body.genre,
+    plot: req.body.plot,
+    cast: req.body.cast,
+  })
+    .then((results) => {
+      res.redirect(`/movies/${results._id}`);
     })
     .catch((err) => {
       console.log("Something went wrong", err);
